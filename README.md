@@ -5,7 +5,11 @@ Contact email: sp@geekworm.com
 # How to setup on Raspiban?
 
 git clone https://github.com/geekworm-com/ups3.git
+
 cd ups3
+
+chmod +x *.sh *.py
+
 sudo ./install.sh
 
                ┌────────────────────┤ UPS V3 Setting ├────────────────────┐
