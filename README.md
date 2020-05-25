@@ -1,9 +1,5 @@
 # ups3
 Raspberry pi smart USP HAT V3
-# Smart UPS V3
-
-Raspberry Pi Smart UPS V3
-
 # How to setup on Raspiban?
 
 git clone https://github.com/geekworm-com/ups3.git
@@ -36,3 +32,4 @@ sudo python status.py or sudo python status.py -t
 View logs:
 
 cat /var/log/smartups.log
+
