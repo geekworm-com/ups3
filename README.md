@@ -2,7 +2,7 @@
 Raspberry pi smart USP HAT V3
 
 Contact email: sp@geekworm.com
-# How to setup on Raspiban?
+# How to setup on Raspbian?
 
 git clone https://github.com/geekworm-com/ups3.git
 
