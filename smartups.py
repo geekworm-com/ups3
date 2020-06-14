@@ -17,7 +17,7 @@ BUS_ADDR 		= 1
 disconnectflag 	= False
 exit_thread 	= False
 max17048_soc	= 0
-POWEROFF_POWER  = 5
+POWEROFF_POWER = 5
 count           = 0
 
 #MAX17048 settings
@@ -54,7 +54,7 @@ LED_PIN = 18
 # LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    	= 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        	= 10      # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 26
+LED_BRIGHTNESS = 12
 LED_INVERT     	= False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    	= 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 # LED Color
@@ -184,19 +184,19 @@ def bq25895_read_status():
 		bus.write_byte_data(BQ25895_ADDRESS, REG_BATFET_DIS, BYTE_BATFET_DIS)
 		
 def print_bq25895status():
-	print "Input: " , bq25895_status['Input']
-	print "ChargeStatus: " , bq25895_status['ChargeStatus']
-	print "BatteryVoltage: " , bq25895_status['BatteryVoltage'], "V"
-	print "BatteryPercentage: " , bq25895_status['BatteryPercentage'] , "%"
+	print ("Input: " , bq25895_status['Input'])
+	print ("ChargeStatus: " , bq25895_status['ChargeStatus'])
+	print ("BatteryVoltage: " , bq25895_status['BatteryVoltage'], "V")
+	print ("BatteryPercentage: " , bq25895_status['BatteryPercentage'] , "%")
 	print("VSYS_STAT: ", bin(vsys_stat), "SDP_STAT: ", bin(sdp_stat), 
 		"PG_STAT:", bin(pg_stat), "CHRG_STAT:" , bin(chrg_stat), 
 		"VBUS_STAT:", bin(vbus_stat))
 	
 def print_max17048status():
-	print "Status of max17048:"
-	print '%.2f' % max17048_v , "V"
-	print max17048_soc , "%"
-	print "Status of bq25895:"
+	print ("Status of max17048:")
+	print ('%.2f' % max17048_v , "V")
+	print (max17048_soc , "%")
+	print ("Status of bq25895:")
 
 # Intialize the library (must be called once before other functions).
 def led_init():
@@ -416,7 +416,7 @@ def ignore(sig, frsma):
 	exit_thread = True
 	
 def handler(signum, frame):
-    print "Signal is received:" + str(signum)
+    print ("Signal is received:" + str(signum))
     exit_thread=True
     thread_led.join()
     exit

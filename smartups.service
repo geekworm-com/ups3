@@ -3,7 +3,7 @@ Description=ugeek smart ups v3
 DefaultDependencies=no
 
 [Service]
-ExecStart=/usr/bin/sudo /usr/bin/python2 /usr/local/bin/smartups.py
+ExecStart=/usr/bin/sudo /usr/bin/python3 /usr/local/bin/smartups.py
 WorkingDirectory=/usr/local/bin/
 Restart=always
 StandardOutput=syslog
