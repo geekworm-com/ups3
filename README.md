@@ -1,8 +1,13 @@
 # ups3
-Raspberry pi smart USP HAT V3
+This repository is a fork from the original 
+[Raspberry Pi UPS HAT V3](https://github.com/geekworm-com/ups3) 
+repository with the focus of making it compatible with python3.
 
-Contact email: sp@geekworm.com
-# How to setup on Raspbian?
+Owners email contact: sp@geekworm.com
+# Test
+This project has been tested on a Raspberry Pi 4 (Buster) system.
+
+# Setup (Raspberry Pi)
 
 git clone https://github.com/geekworm-com/ups3.git
 
