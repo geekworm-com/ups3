@@ -3,7 +3,7 @@ This repository is a fork from the original
 [Raspberry Pi UPS HAT V3](https://github.com/geekworm-com/ups3) 
 repository with the focus of making it compatible with python3.
 
-Owners email contact: sp@geekworm.com
+Owners email contact: info@geekworm.com
 # Test
 This project has been tested on a Raspberry Pi 4 (Buster) system.
 
