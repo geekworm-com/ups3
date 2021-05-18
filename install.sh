@@ -32,7 +32,7 @@ function enable_i2c(){
 }
 
 function brightness_to_percent(){
-	case $1 in
+	case $1 in 
 		0)
 		return 0
 		;;
@@ -76,7 +76,7 @@ function brightness_to_percent(){
 }
 
 function percnet_to_brightness() {
-	case $1 in
+	case $1 in 
 		0)
 		return 0
 		;;
@@ -121,18 +121,21 @@ function percnet_to_brightness() {
 
 # install system required
 function install_sysreq(){
-	SOFT=$(dpkg -l $SOFTWARE_LIST | grep "<none>")
+	SOFT=$(dpkg -l $SOFTWARE_LIST 2>&1 | grep "no packages found")
 	if [ -n "$SOFT" ]; then
-		apt update
+        echo "install scons"
+        apt update
 		apt -y install $SOFTWARE_LIST
-	fi
-	SOFT=$(pip search rpi-ws281x | grep "INSTALLED")
-	if [ -z "$SOFT" ]; then
+    fi
+   
+	# SOFT=$(pip search rpi-ws281x | grep "INSTALLED")
+	# if [ -z "$SOFT" ]; then
+        # echo "Install rpi-ws281x"
 		pip install rpi-ws281x
-		echo "rpi-ws281x install complete!"
-	else
-		echo "rpi-ws281x already exists."
-	fi
+		# echo "rpi-ws281x install complete!"
+	# else
+		# echo "rpi-ws281x already exists."
+	# fi
 }
 
 function check_safeshutdown(){
@@ -240,7 +243,7 @@ function stop_service(){
 	else
 		echo "Service not installed, do not need to stop."
 	fi
-
+	
 }
 
 function start_service(){
@@ -457,7 +460,7 @@ function menu_main(){
 	"1" "UPS GPIO [ $GPIO ]" \
 	"2" "LED Brightness [ $BRIGHTNESS_MENU ]" \
 	"3" "Poweoff power [ <$POWEROFF_POWER% ]" \
-	"4" "Auto run script [ $SERVICEENABLED ]" \
+	"4" "Autorun [ $SERVICEENABLED ]" \
 	"5" "Safe shutdown [ $SAFESHUTDOWN ]" \
 	"6" "Apply Settings" \
 	"7" "$MENU_INSTALLED" \
@@ -466,7 +469,7 @@ function menu_main(){
 }
 
 # Superuser privileges
-if [ $UID -ne 0 ]; then
+if [ $UID -ne 0 ]; then	
 	whiptail --title "$TITLE" \
 	--msgbox "Superuser privileges are required to run this script.\ne.g. \"sudo $0\"" 10 60
     exit 1
@@ -581,4 +584,3 @@ do
 		;;
 	esac
 done
-
