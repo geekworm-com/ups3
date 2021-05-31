@@ -17,7 +17,7 @@ BUS_ADDR 		= 1
 disconnectflag 	= False
 exit_thread 	= False
 max17048_soc	= 0
-POWEROFF_POWER = 5
+POWEROFF_POWER  = 5
 count           = 0
 
 #MAX17048 settings
@@ -31,7 +31,7 @@ REG_ILIM 		= 0x00 #ILIM register
 #BYTE_ILIM 		= 0b01101000 #2A input current limit
 #BYTE_ILIM 		= 0b01111100 #3A input current limit
 BYTE_ILIM 		= 0b01111111 #3.25A input current limit
-REG_ICHG 		= 0x04 
+REG_ICHG 		= 0x04
 BYTE_ICHG 		= 0b01111111 #.5A charging current limit
 REG_CONV_ADC 	= 0x02
 REG_BATFET 		= 0x09
@@ -54,7 +54,7 @@ LED_PIN = 18
 # LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    	= 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        	= 10      # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 12
+LED_BRIGHTNESS = 26
 LED_INVERT     	= False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    	= 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 # LED Color
@@ -73,7 +73,7 @@ def init_i2c():
 	global bus
 	bus = smbus.SMBus(BUS_ADDR)
 
-# Init max17048	
+# Init max17048
 def max17048_init():
 	bus.write_word_data(MAX17048_ADDR, 0xFE ,0xFFFF)
 	return True
@@ -122,7 +122,7 @@ def bq25895_read_status():
 	pg_stat = status[2]
 	chrg_stat = status[4] * 2 + status[3]
 	vbus_stat = status[7] * 4 + status[6] * 2 + status[5]
-	
+
 	if status[2]:
 		power = "Connected"
 	else:
@@ -136,7 +136,7 @@ def bq25895_read_status():
 		charge = "Pre-Charge"
 	else:
 		charge = "Discharging"
-	
+
 	#convert batv register to volts
 	batv = 2.304
 	batv += batvbool[6] * 1.280
@@ -145,58 +145,58 @@ def bq25895_read_status():
 	batv += batvbool[3] * 0.160
 	batv += batvbool[2] * 0.08
 	batv += batvbool[1] * 0.04
-	batv += batvbool[0] * 0.02   
+	batv += batvbool[0] * 0.02
 
 	batpercent = bq25895_translate(batv,3.5,4.184,0,1)
 	if batpercent<0 :
 		batpercent = 0
 	elif batpercent >1 :
 		batpercent = 1
-	
+
 	timeleftmin = int( batpercent * 60* BAT_CAPACITY / CURRENT_DRAW)
 	if timeleftmin < 0 :
 		timeleftmin = 0
-	
+
 	if power == "Connected" :
-		timeleftmin = -1        
-	
+		timeleftmin = -1
+
 	if power == "Disconnected" and disconnectflag == False :
 		disconnectflag = True
 		message = "echo Power Disconnected, system will shutdown in %d minutes! | wall" % (timeleftmin)
 		#os.system(message)
-	
+
 	if power == "Connected" and disconnectflag == True :
 		disconnectflag = False
 		message = "echo Power Restored, battery at %d percent | wall" % (batpercentprev * 100)
 		#os.system(message)
 
 	batpercentprev = batpercent
-	
-	bq25895_status = { 
+
+	bq25895_status = {
 		'Input': power,
 		'ChargeStatus' : charge,
 		'BatteryVoltage' : '%.2f' % batv,
 		"BatteryPercentage" : int(batpercent*100),
 		'TimeRemaining' : int(timeleftmin)
 	}
-	
+
 	if(batv < 3.5):
 		bus.write_byte_data(BQ25895_ADDRESS, REG_BATFET_DIS, BYTE_BATFET_DIS)
-		
+
 def print_bq25895status():
-	print ("Input: " , bq25895_status['Input'])
-	print ("ChargeStatus: " , bq25895_status['ChargeStatus'])
-	print ("BatteryVoltage: " , bq25895_status['BatteryVoltage'], "V")
-	print ("BatteryPercentage: " , bq25895_status['BatteryPercentage'] , "%")
-	print("VSYS_STAT: ", bin(vsys_stat), "SDP_STAT: ", bin(sdp_stat), 
-		"PG_STAT:", bin(pg_stat), "CHRG_STAT:" , bin(chrg_stat), 
+	print "Input: " , bq25895_status['Input']
+	print "ChargeStatus: " , bq25895_status['ChargeStatus']
+	print "BatteryVoltage: " , bq25895_status['BatteryVoltage'], "V"
+	print "BatteryPercentage: " , bq25895_status['BatteryPercentage'] , "%"
+	print("VSYS_STAT: ", bin(vsys_stat), "SDP_STAT: ", bin(sdp_stat),
+		"PG_STAT:", bin(pg_stat), "CHRG_STAT:" , bin(chrg_stat),
 		"VBUS_STAT:", bin(vbus_stat))
-	
+
 def print_max17048status():
-	print ("Status of max17048:")
-	print ('%.2f' % max17048_v , "V")
-	print (max17048_soc , "%")
-	print ("Status of bq25895:")
+	print "Status of max17048:"
+	print '%.2f' % max17048_v , "V"
+	print max17048_soc , "%"
+	print "Status of bq25895:"
 
 # Intialize the library (must be called once before other functions).
 def led_init():
@@ -210,14 +210,14 @@ def led_off():
 	strip.setPixelColor(2, COLOR_BLACK)
 	strip.setPixelColor(3, COLOR_BLACK)
 	strip.show()
-	
+
 def led_full():
 	strip.setPixelColor(0, COLOR_GREEN)
 	strip.setPixelColor(1, COLOR_GREEN)
 	strip.setPixelColor(2, COLOR_GREEN)
 	strip.setPixelColor(3, COLOR_GREEN)
 	strip.show()
-	
+
 # pre-charge
 # led 1,2,3,4 flash
 def led_precharge():
@@ -240,7 +240,7 @@ def led_precharge():
 		strip.show()
 		time.sleep(0.005)
 	time.sleep(1)
-	
+
 # Charging to 25%
 # led 1 flash,others black
 def led_charginto25():
@@ -280,7 +280,7 @@ def led_chargingto50():
 		strip.show()
 		time.sleep(0.005)
 	time.sleep(1)
-	
+
 # Charging from 50% to 75%
 # led 1,2 green,led 3 flash, led 4 black
 def led_chargingto75():
@@ -300,7 +300,7 @@ def led_chargingto75():
 		strip.show()
 		time.sleep(0.005)
 	time.sleep(1)
-	
+
 # Charging from 75% to 100%
 # led 1,2,3 green,led 4 flash
 def led_chargingto100():
@@ -320,7 +320,7 @@ def led_chargingto100():
 		strip.show()
 		time.sleep(0.005)
 	time.sleep(1)
-	
+
 # Dischargeing to 75%
 def led_dischargeto75():
 	strip.setPixelColor(0, COLOR_BLACK)
@@ -328,7 +328,7 @@ def led_dischargeto75():
 	strip.setPixelColor(2, COLOR_GREEN)
 	strip.setPixelColor(3, COLOR_GREEN)
 	strip.show()
-	
+
 # Discharging to 50%
 def led_dischargeto50():
 	strip.setPixelColor(0, COLOR_BLACK)
@@ -336,7 +336,7 @@ def led_dischargeto50():
 	strip.setPixelColor(2, COLOR_GREEN)
 	strip.setPixelColor(3, COLOR_GREEN)
 	strip.show()
-	
+
 # Discharging to 25%
 def led_dischargeto25():
 	strip.setPixelColor(0, COLOR_BLACK)
@@ -352,7 +352,7 @@ def led_dischargeto10():
 	strip.setPixelColor(2, COLOR_BLACK)
 	strip.setPixelColor(3, COLOR_YELLOW)
 	strip.show()
-	
+
 # Discharging to 0%
 def led_dischargeto0():
 	strip.setPixelColor(0, COLOR_BLACK)
@@ -371,7 +371,7 @@ def led_dischargeto0():
 		strip.show()
 		time.sleep(0.005)
 	time.sleep(1)
-	
+
 def led_show():
 	while exit_thread is False:
 		if bq25895_status['Input'] == 'Connected': # Power connected
@@ -406,7 +406,7 @@ def led_show():
 			else:
 				led_dischargeto0()
 	led_off()
-	
+
 def stop(sig, frame):
 	led_off()
 	exit_thread = True
@@ -414,13 +414,13 @@ def stop(sig, frame):
 def ignore(sig, frsma):
 	led_off()
 	exit_thread = True
-	
+
 def handler(signum, frame):
-    print ("Signal is received:" + str(signum))
+    print "Signal is received:" + str(signum)
     exit_thread=True
     thread_led.join()
     exit
-	
+
 def handle_signal():
 	signal.signal(signal.SIGUSR1, handler)
 	signal.signal(signal.SIGUSR2, handler)
@@ -431,12 +431,12 @@ def handle_signal():
 def logging_status():
 	info = ' Input:' + bq25895_status['Input'] + ' , ChargeStatus: ' + bq25895_status['ChargeStatus'] + ' , SOC:' + str(max17048_soc) + "%"
 	app_log.info(info)
-	
+
 # Main Loop
 if __name__ == '__main__':
 	log_formatter = logging.Formatter('%(asctime)s  %(filename)s : %(levelname)s  %(message)s')
 	log_filename = '/var/log/smartups.log'
-	log_handler = RotatingFileHandler(log_filename, mode='a', maxBytes=5 * 1024 * 1024, 
+	log_handler = RotatingFileHandler(log_filename, mode='a', maxBytes=5 * 1024 * 1024,
                                  backupCount=2, encoding=None, delay=0)
 	log_handler.setFormatter(log_formatter)
 	log_handler.setLevel(logging.INFO)
@@ -451,7 +451,7 @@ if __name__ == '__main__':
 	led_init()
 	led_precharge()
 	thread_led = threading.Thread(target=led_show)
-	thread_led.start() 
+	thread_led.start()
 	try:
 		while (True):
 			max17048_getstatus()
